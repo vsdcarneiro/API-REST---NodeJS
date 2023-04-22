@@ -21,10 +21,10 @@ const getUserById = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const user = req.body;
+  const { body } = req;
 
-  if (user && Object.keys(user).length > 0) {
-    data.users.push(user);
+  if (body && Object.keys(body).length > 0) {
+    data.users.push(body);
     res.sendStatus(201);
   } else {
     res.sendStatus(400);
