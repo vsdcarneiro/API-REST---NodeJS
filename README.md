@@ -1,4 +1,4 @@
-# API-REST--NodeJS
+# API-REST---NodeJS
 API REST construída em NodeJS representando as quatro operações básicas para criar e gerenciar elementos de dados persistentes.
 
 ![Captura de tela de 2023-03-28 11-18-51](https://user-images.githubusercontent.com/119147462/228274019-c6c682b2-fac8-4c83-b01b-47d35792d804.png)
