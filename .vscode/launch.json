@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Iniciar o Programa",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/server.js",
+      "program": "${workspaceFolder}/index.js",
       "restart": true,
       "console": "integratedTerminal"
     }
