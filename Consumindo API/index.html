@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./public/css/bootstrap.min.css" />
+    <link rel="shortcut icon" href="./public/img/logo.png" type="image/x-icon" />
+</head>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/" style="margin-left: 50px">
+            <img src="./public/img/logo.png" alt="logo" class="d-inline-block align-text-center"
+                style="margin-right: 5px; width: 35px" />User management
+        </a>
+    </div>
+</nav>
+
+<body style="background-color: #fffbf6">
+    <div class="container">
+        <div class="card mt-4 mb-4">
+            <div class="card text-center">
+                <div class="card" id="list-users">
+                    <div class="card-body">
+                        <table class="table table-striped table-borderless table-sm text-center">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th colspan="7" scope="col">Users</th>
+                                </tr>
+                            </thead>
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">id</th>
+                                    <th scope="col">name</th>
+                                    <th scope="col">email</th>
+                                    <th scope="col">phone</th>
+                                    <th scope="col">website</th>
+                                    <th scope="col">company</th>
+                                    <th scope="col">actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <span style="font-size: larger; font-weight: 600;">Add user</span>
+                </div>
+                <div class="card-body">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                    <label class="form-label">E-mail</label>
+                    <input type="text" class="form-control" id="email" placeholder="Enter your e-mail">
+                    <label class="form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone" placeholder="Enter your phone">
+                    <label class="form-label">Website</label>
+                    <input type="text" class="form-control" id="website" placeholder="Enter your website">
+                    <label class="form-label">Company</label>
+                    <input type="text" class="form-control" id="company" placeholder="Enter your company name">
+                    <br>
+                    <button type="button" onclick="createUser()" class="btn btn-outline-success">Add</button>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <span style="font-size: larger; font-weight: 600;">Edit user</span>
+                </div>
+                <div class="card-body">
+                    <form action="#" method="post" id="form-edit">
+                        <input type="hidden" class="form-control" id="edit-id" readonly>
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" id="edit-name">
+                        <label class="form-label">E-mail</label>
+                        <input type="text" class="form-control" id="edit-email">
+                        <label class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="edit-phone">
+                        <label class="form-label">Website</label>
+                        <input type="text" class="form-control" id="edit-website">
+                        <label class="form-label">Company</label>
+                        <input type="text" class="form-control" id="edit-company">
+                        <br>
+                        <button type="button" onclick="updateUser()" class="btn btn-outline-success">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+</body>
+<!-- Modules -->
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script>
+    let contUser;
+
+    // getUsers
+    (async () => {
+        try {
+            const response = await axios.get("http://localhost:3000/users");
+
+            if (response.status === 200) {
+                const users = response.data.users;
+                const table = document.getElementById("table-body");
+
+                contUser = users.length;
+
+                for (let index = 0; index < users.length; index++) {
+                    const user = users[index];
+
+                    // create table row
+                    const row = table.insertRow(index);
+                    row.insertCell(0).innerHTML = user.id;
+                    row.insertCell(1).innerHTML = user.name;
+                    row.insertCell(2).innerHTML = user.email;
+                    row.insertCell(3).innerHTML = user.phone;
+                    row.insertCell(4).innerHTML = user.website;
+                    row.insertCell(5).innerHTML = user.company.name;
+                    row.insertCell(6).innerHTML = `
+                <img src='./public/img/editar.png' alt='edit' title='Edit' width='30px' onclick='loadForm(${JSON.stringify(user)})' style='padding: 5px; cursor: pointer;'>
+                <img src='./public/img/excluir.png' alt='delete' title='Delete' width='30px' onclick='deleteUser(${user.id})' style='padding: 5px; cursor: pointer;'>
+                `;
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    })();
+
+    async function createUser() {
+        contUser++;
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const website = document.getElementById("website").value;
+        const company = document.getElementById("company").value;
+
+        const user = {
+            id: contUser,
+            name: name,
+            email: email,
+            phone: phone,
+            website: website,
+            company: { name: company },
+        };
+
+        const response = await axios.post("http://localhost:3000/users", user);
+
+        if (response.status === 201) {
+            alert("User added");
+            document.location.reload();
+        }
+    }
+
+    function loadForm(user) {
+        const { id } = user;
+        const { name } = user;
+        const { email } = user;
+        const { phone } = user;
+        const { website } = user;
+        const company = user.company.name;
+
+        document.getElementById("form-edit").scrollIntoView();
+        document.getElementById("edit-id").value = id;
+        document.getElementById("edit-name").value = name;
+        document.getElementById("edit-email").value = email;
+        document.getElementById("edit-phone").value = phone;
+        document.getElementById("edit-website").value = website;
+        document.getElementById("edit-company").value = company;
+    }
+
+    async function updateUser() {
+        const id = document.getElementById("edit-id").value;
+        const name = document.getElementById("edit-name").value;
+        const email = document.getElementById("edit-email").value;
+        const phone = document.getElementById("edit-phone").value;
+        const website = document.getElementById("edit-website").value;
+        const company = document.getElementById("edit-company").value;
+
+        const user = {
+            name,
+            email,
+            phone,
+            website,
+            company: { name: company },
+        };
+
+        const response = await axios.put(`http://localhost:3000/users/${id}`, user);
+        console.log(response)
+
+        if (response.status === 204) {
+            alert("User updated");
+            document.location.reload();
+        }
+    }
+
+    async function deleteUser(userId) {
+        const option = confirm("Do you want to delete this user?");
+
+        if (option) {
+            const response = await axios.delete(
+                `http://localhost:3000/users/${userId}`
+            );
+
+            if (response.status === 204) {
+                alert("User deleted");
+                document.location.reload();
+            }
+        }
+    }
+</script>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+<script src="./public/js/bootstrap.min.js"></script>
+
+</html>
