@@ -6,4 +6,6 @@ API REST construída em NodeJS implementando as quatro operações básicas para
 ![Captura de tela de 2023-04-22 19-53-16](https://user-images.githubusercontent.com/119147462/233810950-cb14fc11-43c2-4ae1-9fbd-69bdc251a934.png)
 ![Captura de tela de 2023-04-22 19-53-38](https://user-images.githubusercontent.com/119147462/233810949-d8a2d6d8-e607-486e-bd89-cb8d64130e6e.png)
 ![Captura de tela de 2023-04-22 19-54-02](https://user-images.githubusercontent.com/119147462/233810947-25c500c3-08a1-4937-894a-8d68516b6220.png)
+![Captura de tela de 2023-04-23 22-48-42](https://user-images.githubusercontent.com/119147462/233881551-f71c3f53-3c77-43b6-b1c4-6cede3ae390e.png)
+
 
